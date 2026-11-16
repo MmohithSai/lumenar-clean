@@ -1,0 +1,239 @@
+@import "tailwindcss";
+@import "./mocks.css" layer(components);
+
+/* Lumenar brand tokens: the only place design values are declared.
+   Neutral surfaces, one accent. Lime is always a fill with --accent-ink on it; when the accent must be text, use --accent-text.
+   Light is the default. html[data-theme="dark"] flips the page; [data-tone] flips one block. */
+
+:root {
+  --lime: #c4f042;
+  --ink: #0a0a0a;
+
+  --sans: var(--font-geist), "Segoe UI", system-ui, sans-serif;
+  --mono: var(--font-geist-mono), ui-monospace, "Cascadia Mono", Consolas, monospace;
+  --astra: var(--font-astra), var(--sans);
+
+  --r-xs: 4px; --r-sm: 6px; --r-md: 8px; --r-lg: 12px; --r-xl: 16px; --r-2xl: 24px; --r-3xl: 32px;
+
+  --sh-card: 0 1px 2px rgba(0, 0, 0, .04), 0 4px 14px -6px rgba(0, 0, 0, .08);
+  --sh-float: 0 2px 4px rgba(0, 0, 0, .04), 0 10px 24px -10px rgba(0, 0, 0, .12);
+  --sh-window: 0 1px 2px rgba(0, 0, 0, .04), 0 12px 32px -12px rgba(0, 0, 0, .12), 0 40px 80px -40px rgba(0, 0, 0, .12);
+
+  --ease: cubic-bezier(.16, 1, .3, 1);
+  --ease-out: cubic-bezier(.22, 1, .36, 1);
+  --ease-std: cubic-bezier(.4, 0, .2, 1);
+  --t-micro: 180ms var(--ease-std);
+  --t-card: 300ms var(--ease-std);
+  --t-faq: 300ms var(--ease-std);
+  interpolate-size: allow-keywords;
+}
+
+:root, [data-tone="paper"] {
+  --bg: #fafafa; --surface: #fff; --raise: #f2f2f2; --line: #e5e5e5;
+  --fg: #0a0a0a; --fg-2: #525252; --fg-3: #6b6b6b;
+  --accent: var(--lime); --accent-ink: var(--ink); --accent-soft: #eef8cf; --accent-text: #4a6800;
+  --warn: #b8641f; --ok: #2f8a5c; --err: #c0392b;
+  --human: #e4e4e4; --human-ink: #0a0a0a;
+  --grid: rgba(10, 10, 10, .09); --vellum: rgba(10, 10, 10, .03); --shadow: rgba(0, 0, 0, .14);
+  --overlay: rgba(10, 10, 10, .45);
+  color-scheme: light;
+}
+html[data-theme="dark"], [data-tone="ink"] {
+  --bg: #0e0e0e; --surface: #171717; --raise: #1f1f1f; --line: #2a2a2a;
+  --fg: #fafafa; --fg-2: #a3a3a3; --fg-3: #8a8a8a;
+  --accent: var(--lime); --accent-ink: var(--ink); --accent-soft: #232b10; --accent-text: var(--lime);
+  --warn: #ee9a52; --ok: #6cc797; --err: #ef7b7b;
+  --human: #333; --human-ink: #fafafa;
+  --grid: rgba(250, 250, 250, .1); --vellum: rgba(250, 250, 250, .04); --shadow: rgba(0, 0, 0, .5);
+  --overlay: rgba(0, 0, 0, .6);
+  color-scheme: dark;
+}
+/* an ink block on the dark page lifts one step so it still reads as a block */
+html[data-theme="dark"] [data-tone="ink"] { --bg: #171717; --surface: #1f1f1f; --raise: #282828; --line: #333 }
+[data-tone="lime"] {
+  --bg: var(--lime); --surface: color-mix(in srgb, #fff 45%, var(--lime)); --raise: color-mix(in srgb, #000 7%, var(--lime)); --line: rgba(10, 10, 10, .18);
+  --fg: #0a0a0a; --fg-2: rgba(10, 10, 10, .76); --fg-3: rgba(10, 10, 10, .64);
+  --accent: var(--ink); --accent-ink: var(--lime); --accent-soft: rgba(10, 10, 10, .08); --accent-text: var(--ink);
+  --warn: #0a0a0a; --ok: #0a0a0a; --err: #0a0a0a;
+  --human: #0a0a0a; --human-ink: var(--lime);
+  --grid: rgba(10, 10, 10, .14); --vellum: rgba(10, 10, 10, .05);
+  color-scheme: light;
+}
+:root, [data-tone] {
+  --agent: var(--accent-text);
+  --glint-c: var(--fg);
+  --tile: var(--raise);
+  --tint: var(--accent-soft);
+  --hover-line: color-mix(in srgb, var(--fg) 30%, var(--line));
+  --head-bg: color-mix(in srgb, var(--bg) 86%, transparent);
+  --dots: radial-gradient(var(--grid) 1px, transparent 1px);
+}
+
+@theme inline {
+  --font-sans: var(--sans);
+  --font-mono: var(--mono);
+  --font-astra: var(--astra);
+
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-raise: var(--raise);
+  --color-line: var(--line);
+  --color-fg: var(--fg);
+  --color-fg-2: var(--fg-2);
+  --color-fg-3: var(--fg-3);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-accent-soft: var(--accent-soft);
+  --color-accent-text: var(--accent-text);
+  --color-agent: var(--agent);
+  --color-tint: var(--tint);
+  --color-warn: var(--warn);
+  --color-ok: var(--ok);
+  --color-err: var(--err);
+
+  --radius-xs: var(--r-xs);
+  --radius-sm: var(--r-sm);
+  --radius-md: var(--r-md);
+  --radius-lg: var(--r-lg);
+  --radius-xl: var(--r-xl);
+  --radius-2xl: var(--r-2xl);
+  --radius-3xl: var(--r-3xl);
+
+  --shadow-window: var(--sh-window);
+  --shadow-card: var(--sh-card);
+  --shadow-float: var(--sh-float);
+
+  --breakpoint-nav: 56.3125rem;
+}
+
+@keyframes arrive { 0% { opacity: 0; translate: 0 16px } 100% { opacity: 1; translate: 0 } }
+@keyframes spin { 100% { transform: rotate(360deg) } }
+@keyframes pulse-dot { 0%, 100% { opacity: 1 } 50% { opacity: .35 } }
+
+@layer base {
+  html { background: var(--bg); -webkit-text-size-adjust: 100%; scroll-padding-top: 92px }
+  body { margin: 0; font: 400 16px/1.6 var(--sans); background: var(--bg); color: var(--fg); -webkit-font-smoothing: antialiased; overflow-x: clip }
+  ::selection { background: var(--lime); color: var(--ink) }
+  :is(a, button, summary, input, select, textarea):focus-visible { outline: 2px solid var(--fg); outline-offset: 3px }
+  button, summary { cursor: pointer }
+}
+
+/* Component classes sit in the components layer so a Tailwind utility on the same element wins. */
+@layer components {
+[data-tone] { background: var(--bg); color: var(--fg) }
+.page { min-height: 100dvh; display: flex; flex-direction: column }
+.page > main { flex: 1 }
+
+/* layout */
+.wrap { width: min(1200px, 100% - 48px); margin-inline: auto }
+@media (max-width: 640px) { .wrap { width: calc(100% - 32px) } }
+.sec { margin-block: clamp(72px, 9vw, 128px) }
+.panel { border: 1px solid var(--line) }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-xl) }
+.dots { background-image: var(--dots); background-size: 16px 16px }
+
+/* type */
+.t-display { font: 500 clamp(42px, 6.2vw, 84px)/1.03 var(--sans); letter-spacing: -.045em; text-wrap: balance }
+.t-display em, .mark { font-style: normal; display: inline-block; padding: 0 .16em .04em; margin-inline: -.04em; border-radius: .16em; background: var(--accent); color: var(--accent-ink) }
+.t-lede { font: 400 clamp(17px, 1.5vw, 20px)/1.5 var(--sans); color: var(--fg-2); text-wrap: pretty }
+.t-h2 { font: 500 clamp(30px, 3.4vw, 48px)/1.1 var(--sans); letter-spacing: -.035em; text-wrap: balance }
+.t-h2-lg { font: 500 clamp(34px, 4.4vw, 60px)/1.05 var(--sans); letter-spacing: -.04em; text-wrap: balance }
+.t-statement { font: 500 clamp(26px, 3.4vw, 48px)/1.3 var(--sans); letter-spacing: -.03em }
+.t-stat { font: 500 clamp(48px, 5.6vw, 80px)/1 var(--sans); letter-spacing: -.05em; font-variant-numeric: tabular-nums }
+.t-stat-label { font: 400 16px/24px var(--sans); color: var(--fg-2) }
+.t-plan { font: 500 20px/1.25 var(--sans); letter-spacing: -.02em }
+.t-price { font: 500 clamp(34px, 3vw, 44px)/1.05 var(--sans); letter-spacing: -.045em }
+.t-bento { font: 500 clamp(21px, 2vw, 26px)/1.2 var(--sans); letter-spacing: -.03em }
+.t-faq { font: 500 18px/26px var(--sans); letter-spacing: -.01em }
+.t-h3 { font: 500 18px/26px var(--sans); letter-spacing: -.015em }
+.t-tab { font: 400 15px/24px var(--sans); color: var(--fg-2) }
+.t-trust { font: 400 15px/24px var(--sans); color: var(--fg-2) }
+.t-body { font: 400 15px/24px var(--sans); color: var(--fg-2) }
+.t-small { font: 400 13px/20px var(--sans); color: var(--fg-3) }
+.t-eyebrow { display: inline-flex; align-items: center; gap: 8px; font: 500 12px/1.4 var(--mono); letter-spacing: .04em; text-transform: uppercase; color: var(--fg-2) }
+.t-eyebrow::before { content: ""; width: 8px; height: 8px; border-radius: 2px; background: var(--accent); box-shadow: inset 0 0 0 1px rgba(10, 10, 10, .12); flex: none }
+.t-eyebrow.plain::before { content: none }
+.t-nav { font: 500 14px/1.4 var(--sans); letter-spacing: -.005em }
+.t-code { font: 400 12px/22px var(--mono) }
+.t-label { font: 500 11px/1.4 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--fg-3) }
+
+/* buttons: the primary is a split CTA, an ink label beside a lime arrow block */
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 44px; padding: 0 18px; border: 1px solid transparent; border-radius: var(--r-lg); font: 500 15px/1 var(--sans); letter-spacing: -.005em; white-space: nowrap; cursor: pointer; transition: background var(--t-micro), border-color var(--t-micro), color var(--t-micro) }
+.btn-ghost { background: var(--surface); border-color: var(--line); color: var(--fg) }
+.btn-ghost:hover { background: var(--raise); border-color: var(--hover-line) }
+.cta { display: inline-flex; align-items: stretch; gap: 4px; min-height: 44px; font: 500 15px/1 var(--sans); letter-spacing: -.005em; white-space: nowrap; border-radius: var(--r-lg) }
+.cta-label { display: inline-flex; flex: 1; align-items: center; justify-content: center; padding: 0 18px; border-radius: var(--r-lg); background: var(--fg); color: var(--bg); transition: opacity var(--t-micro) }
+.cta-arrow { display: grid; place-items: center; width: 44px; flex: none; border-radius: var(--r-lg); background: var(--accent); color: var(--accent-ink) }
+.cta-arrow svg { transition: transform var(--t-card) }
+.cta:hover .cta-label { opacity: .88 }
+.cta:hover .cta-arrow svg { transform: rotate(-45deg) }
+.cta.sm, .btn.sm { min-height: 38px; font-size: 14px }
+.cta.sm .cta-label { padding: 0 14px } .cta.sm .cta-arrow { width: 38px } .btn.sm { padding: 0 14px }
+.nudge svg { transition: transform var(--t-micro) }
+.nudge:hover svg { transform: translate(2px, -2px) }
+
+/* shared interaction */
+.lift { transition: border-color var(--t-card), box-shadow var(--t-card), transform var(--t-card) }
+.lift:hover { transform: translateY(-2px); border-color: var(--hover-line); box-shadow: var(--sh-float) }
+html[data-js] .reveal:not(.in) { opacity: 0; translate: 0 16px }
+.reveal { transition: opacity 600ms var(--ease-out), translate 600ms var(--ease-out) }
+.arrive { animation: arrive .8s var(--ease-out) both }
+.link { text-decoration: underline; text-decoration-color: var(--line); text-underline-offset: 4px; transition: text-decoration-color var(--t-micro) }
+.link:hover { text-decoration-color: currentColor }
+.link-accent { transition: opacity var(--t-micro) }
+.link-accent:hover { opacity: .6 }
+
+/* logo */
+.logo-star { display: block; width: auto; filter: grayscale(1) contrast(1.05) }
+html[data-theme="dark"] .logo-star, [data-tone="ink"] .logo-star { filter: grayscale(1) brightness(1.4) }
+
+/* header */
+.hdr { position: sticky; top: 0; z-index: 60; height: 68px; background: var(--head-bg); backdrop-filter: blur(14px); color: var(--fg); transition: box-shadow var(--t-micro) }
+.hdr[data-scrolled="true"] { box-shadow: 0 1px 0 var(--line) }
+.nav-link { position: relative; display: inline-flex; align-items: center; padding: 8px 12px; border-radius: var(--r-md); color: var(--fg-2); transition: color var(--t-micro), background var(--t-micro) }
+.nav-link:hover, .nav-item:focus-within .nav-link { color: var(--fg); background: var(--raise) }
+.nav-link[aria-current="page"] { color: var(--fg) }
+.nav-link[aria-current="page"]::after { content: ""; position: absolute; left: 12px; right: 12px; bottom: 2px; height: 3px; border-radius: 2px; background: var(--accent) }
+.nav-panel { position: absolute; top: calc(100% + 6px); left: -8px; width: 300px; padding: 6px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-xl); box-shadow: var(--sh-window); opacity: 0; visibility: hidden; translate: 0 -4px; transition: opacity var(--t-micro), translate var(--t-micro), visibility var(--t-micro) }
+.nav-panel::before { content: ""; position: absolute; inset: -8px 0 100% }
+.nav-item:hover .nav-panel, .nav-item:focus-within .nav-panel { opacity: 1; visibility: visible; translate: 0 }
+.nav-row { display: block; padding: 10px 12px; border-radius: var(--r-lg); transition: background var(--t-micro) }
+.nav-row:hover { background: var(--raise) }
+.menu-dialog { margin: auto; width: min(420px, calc(100vw - 32px)); max-height: calc(100dvh - 32px); padding: 24px; color: var(--fg); background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-2xl) }
+.menu-dialog::backdrop { background: var(--overlay); backdrop-filter: blur(4px) }
+
+/* dock */
+.dock { position: fixed; right: 16px; bottom: 16px; z-index: 50; display: flex; gap: 2px; padding: 4px; border-radius: 999px; background: var(--surface); border: 1px solid var(--line); box-shadow: var(--sh-float) }
+.dock button { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 999px; color: var(--fg-2); transition: background var(--t-micro), color var(--t-micro) }
+.dock button:hover { background: var(--raise); color: var(--fg) }
+
+/* faq: native exclusive details, height animated where the browser can */
+.faq-row { border-top: 1px solid var(--line) }
+.faq-row:first-child { border-top: 0 }
+.faq-row summary { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding-block: 22px; list-style: none }
+.faq-row summary::-webkit-details-marker { display: none }
+.faq-row summary i { display: grid; place-items: center; width: 32px; height: 32px; flex: none; border-radius: 999px; background: var(--raise); transition: transform var(--t-faq), background var(--t-faq), color var(--t-faq) }
+.faq-row[open] summary i { transform: rotate(45deg); background: var(--accent); color: var(--accent-ink) }
+.faq-row::details-content { height: 0; overflow: hidden; transition: height var(--t-faq), content-visibility var(--t-faq) allow-discrete }
+.faq-row[open]::details-content { height: auto }
+
+/* scroll-scrubbed statement words: dim only once the script is there to light them */
+.scrub { transition: opacity 120ms linear }
+html[data-js] .scrub:not(.on) { opacity: .16 }
+
+/* footer wordmark: sized so LUMENAR (4.92em wide in Astra) fits the viewport */
+.wordmark { display: block; margin-bottom: -.1em; font: 400 clamp(64px, 19.2vw, 400px)/1 var(--astra); text-align: center; white-space: nowrap; color: var(--fg); user-select: none }
+
+/* the turning star sits on ink, so it keeps a brighter render */
+.turn { filter: grayscale(1) brightness(1.25) drop-shadow(0 18px 30px rgba(0, 0, 0, .45)) }
+}
+
+/* Motion off: unlayered and important, so it beats every layer above. */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after { animation: none !important; transition: none !important; scroll-behavior: auto !important }
+  html[data-js] .reveal:not(.in) { opacity: 1 !important; translate: 0 !important }
+  html[data-js] .scrub:not(.on) { opacity: 1 !important }
+}
+html[data-reduced-motion="true"] :is(*, ::before, ::after) { animation: none !important; transition: none !important; scroll-behavior: auto !important }
+html[data-reduced-motion="true"] .reveal:not(.in) { opacity: 1 !important; translate: 0 !important }
+html[data-reduced-motion="true"] .scrub:not(.on) { opacity: 1 !important }
